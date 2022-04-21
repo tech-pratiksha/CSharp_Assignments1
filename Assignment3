@@ -1,0 +1,338 @@
+/* 1)	Create a hierarchy of Employee, Manager, MarketingExecutive in Employee Management System. They should have the following functionality.
+a)	Manager with following private members.
+	Petrol Allowance: 8 % of Salary.
+	Food Allowance : 13 % of Salary.
+	Other Allowances : 3% of Salary.
+Calculate GrossSalary by adding above allowances. Override CalculateSalary() method to calculate Net Salary. NetSalary. PF calculation should not consider above allowances.
+b)	MarketingExecutive with following private members.
+	Kilometer travel
+	Tour Allowances : Rs 5/- per Kilometer (Automatically generated).
+	Telephone Allowances : Rs.1000/-
+Calculate GrossSalary by adding above allowances. Override CalculateSalary(). NetSalary,PF calculation should not consider above allowances.
+Implement IPrintable interface for every Employee which will allow to print details of Employee on console. */
+
+
+using System;
+class Employee
+{
+    protected int EmpNo { get; set; }
+    protected string EmpName { get; set; }
+    protected double Salary { get; set; }
+    protected double HRA { get; set; }
+    protected double TA { get; set; }
+    protected double DA { get; set; }
+    public double PF { get; private set; }
+    protected double TDS { get; set; }
+    protected double NetSalary { get; set; }
+    protected double GrossSalary { get; set; }
+
+
+    public Employee(int EmpNum, string EmpNm, double Sal)
+    {
+        EmpNo = EmpNo;
+        EmpName = EmpNm;
+        Salary = Sal;
+        if (Salary < 5000)
+        {
+            HRA = Salary * 10 / 100;
+            TA = Salary * 5 / 100;
+            DA = Salary * 15 / 100;
+            GrossSalary = Salary + HRA + TA + DA;
+        }
+        else if (Salary < 10000)
+        {
+            HRA = Salary * 15 / 100;
+            TA = Salary * 10 / 100;
+            DA = Salary * 20 / 100;
+            GrossSalary = Salary + HRA + TA + DA;
+        }
+        else if (Salary < 15000)
+        {
+            HRA = Salary * 20 / 100;
+            TA = Salary * 15 / 100;
+            DA = Salary * 25 / 100;
+            GrossSalary = Salary + HRA + TA + DA;
+        }
+        else if (Salary < 20000)
+        {
+            HRA = Salary * 25 / 100;
+            TA = Salary * 20 / 100;
+            DA = Salary * 30 / 100;
+            GrossSalary = Salary + HRA + TA + DA;
+        }
+        else
+        {
+            HRA = Salary + 30 / 100;
+            TA = Salary + 25 / 100;
+            DA = Salary + 35 / 100;
+            GrossSalary = Salary + HRA + TA + DA;
+        }
+    }
+    public virtual void ClaculateSalary()
+    {
+        PF = GrossSalary * 10 / 100;
+        TDS = GrossSalary * 18 / 100;
+        NetSalary = GrossSalary - (PF + TDS);
+    }
+
+    public virtual void Gsal()
+    {
+        Console.WriteLine(GrossSalary);
+    }
+
+}
+
+
+
+class Manager : Employee
+{
+    private double PetrolAllowance { get; set; }
+    private double FoodAllowance { get; set; }
+    private double OtherAllowance { get; set; }
+    public Manager(int EmpNum, string EmpNm, double Sal) : base(EmpNum, EmpNm, Sal)
+    {
+        PetrolAllowance = Salary * 8 / 100;
+        FoodAllowance = Salary * 13 / 100;
+        OtherAllowance = Salary * 3 / 100;
+    }
+    public override void Gsal()
+    {
+        GrossSalary = (GrossSalary + PetrolAllowance + FoodAllowance + OtherAllowance);
+        Console.WriteLine(GrossSalary);
+    }
+
+    public override void ClaculateSalary()
+    {
+        NetSalary = GrossSalary - (PF + TDS);
+    }
+}
+class MarketingExecutive : Employee
+{
+    private double kilometertravel { get; set; }
+    private double TourAllowance { get; set; }
+    private double TelephoneAllowance { get; set; }
+
+    public MarketingExecutive(int EmpNum, string EmpNm, double Sal, double klt) : base(EmpNum, EmpNm, Sal)
+    {
+        kilometertravel = klt;
+        TourAllowance = kilometertravel * 5;
+        TelephoneAllowance = 1000;
+    }
+    public override void Gsal()
+    {
+        GrossSalary = (GrossSalary + TourAllowance + TelephoneAllowance);
+        Console.WriteLine(GrossSalary);
+    }
+    public override void ClaculateSalary()
+    {
+        NetSalary = GrossSalary - (PF + TDS);
+
+    }
+
+}
+class MainProgram
+{
+    static void Main(string[] args)
+    {
+        //Employee Emp1 = new Employee(1, "Pratiksha",25000);
+        //Manager M1 = new MarkE1 = new Manager(2,"Satya",30000);
+        MarketingExecutive MarkE1 = new MarketingExecutive(3, " Abhijit", 35000, 10);
+        //Emp1.Gsal();
+        //M1.Gsal();
+        MarkE1.Gsal();
+    }
+}
+
+
+-------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+
+/* 2)	Write a class called MyStack with following members.
+a)	integer array
+b)	integer variable to store top position
+c)	size of the array.
+Implement Push() and Pop() operation. Implement ICloneable interface to perform cloning. Write a client application to perform cloning. */
+
+
+// Stack
+using System;
+
+namespace ConsoleApplication1
+{
+    class Stack
+    {
+        private int[] ele;
+        private int top;
+        private int max;
+
+        //Constructor initialize the variables || it calls as soon as object get created.
+        public Stack(int size)
+        {
+            ele = new int[size];
+            top = -1;
+            max = size;
+        }
+
+        public void push(int item)
+        {
+            if (top == max - 1)
+            {
+                throw new Exception("Stack Overflow, can't perform push");
+            }
+            else
+            {
+                ele[++top] = item;
+            }
+        }
+        public int pop()
+        {
+            if (top == -1)
+            {
+                throw new Exception("Stacck is Empty");
+            }
+            else
+            {
+                Console.WriteLine("Poped element is " + ele[top]);
+                return ele[top--];
+            }
+        }
+        public void printStack()
+        {
+            if (top == -1)
+            {
+                Console.WriteLine("Stack is Empty");
+                return;
+            }
+            else
+            {
+                for (int i = 0; i <= top; i++)
+                {
+                    Console.WriteLine("Item[" + (i + 1) + "): " + ele[i]);
+                }
+            }
+        }
+    }
+
+    class Program
+    {
+        static void Main()
+        {
+            //Stack is class || S is object
+            Stack S = new Stack(5);
+
+            //objectname.methodname() -> to call the method inside the class
+            S.push(101); // Last in First Out
+            S.push(202);
+            S.push(303);
+            S.push(404);
+            S.push(505);
+
+            Console.WriteLine("Items are : ");
+            S.printStack();
+
+            S.pop();
+            S.pop();
+            S.pop();
+            S.pop();
+            S.pop();
+
+        }
+    }
+}
+
+
+---------------------------------------------------------------------------------------------------------------------------------------------------------------------
+
+/*  3)	Create a custom exception class named StackException. The Push()and Pop() method should throw object of StackException when the stack is full or empty
+respectively. */
+
+using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Text;
+using System.Threading.Tasks;
+
+namespace Exeption_Assignment
+{
+    class StackExeption
+    {
+        private int[] ele;
+        private int top;
+        private int max;
+
+        //Constructor initialize the variables || it calls as soon as object get created.
+        public StackExeption(int size)
+        {
+            ele = new int[size];
+            top = -1;
+            max = size;
+        }
+
+        public void push(int item)
+        {
+            if (top == max - 1)
+            {
+                throw new Exception("Stack Overflow, can't perform push");
+            }
+            else
+            {
+                ele[++top] = item;
+            }
+        }
+        public int pop()
+        {
+            if (top == -1)
+            {
+                throw new Exception("Stacck is Empty");
+            }
+            else
+            {
+                Console.WriteLine("Poped element is " + ele[top]);
+                return ele[top--];
+            }
+        }
+        public void printStack()
+        {
+            if (top == -1)
+            {
+                Console.WriteLine("Stack is Empty");
+                return;
+            }
+            else
+            {
+                for (int i = 0; i <= top; i++)
+                {
+                    Console.WriteLine("Item[" + (i + 1) + "): " + ele[i]);
+                }
+            }
+        }
+    }
+
+    class Program
+    {
+        static void Main()
+        {
+            //StackExeptions is class || S is object
+            StackExeption S = new StackExeption(5);
+
+            //objectname.methodname() -> to call the method inside the class
+            S.push(1000); // Last in First Out
+            S.push(2000);
+            S.push(3000);
+            S.push(4000);
+            S.push(5000);
+
+            Console.WriteLine("Items are : ");
+            S.printStack();
+
+            S.pop();
+            S.pop();
+            S.pop();
+            S.pop();
+            S.pop();
+
+        }
+    }
+}
+
+
+

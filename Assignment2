@@ -1,0 +1,135 @@
+/*1)	Develop Employee Management System for Litware Organization. Write a Class Library project LitwareLib.
+a)	Add class Employee with following private members:
+	EmpNo	int
+	EmpName string
+	Salary double
+	HRA	double
+	TA	double
+	DA	double
+	PF	double
+	TDS	double
+	NetSalary double
+	GrossSalary double.
+
+Write methods for accepting EmpNo, EmpName and Salary. HRA, TA, DA, PPF, TDS, NET, GROSS should be calculated automatically. Follow the table for calculations.
+Salary	HRA % of Salary	TA % of Salary	DA % of Salary
+<5000	10	5	15
+<10000	15	10	20
+<15000	20	15	25
+<20000	25	20	30
+>=20000	30	25	35
+GrossSalary = Salary + HRA + TA + DA.
+Calculate PF, TDS and Net salary in a function named “CalculateSalary()”
+PF = 10 % of GrossSalary. TDS = 18 % of GrossSalary.
+NetSalary = GrossSalary – (PF + TDS).
+e) Write a console application Employee Management which allow HR staff member to register newly joined employee with EmpNo, EmpName and Salary. Display gross salary of employee on console. LitwareLib class Library will be used in Test console application for creating objects and invoking functionality of Employee class. Use Exception Handling mechanism wherever necessary
+*/
+
+using System;
+class Employee
+{
+    private int EmpNo;
+    private string EmpName;
+    private double Salary;
+    private double HRA;
+    private double TA;
+    private double DA;
+    private double PF;
+    private double TDS;
+    private double NetSalary;
+    private double GrossSalary;
+
+    // Parameterized Constructor
+    // User defined
+
+    public Employee() { }
+
+    public void getEmployeeDetails()
+    {
+
+        Console.WriteLine("Enter the Empolyee No: ");
+        this.EmpNo = Convert.ToInt32(Console.ReadLine());
+
+        Console.WriteLine("Enter Name of An Empolyee: ");
+        this.EmpName = Console.ReadLine();
+
+        Console.WriteLine("Enter the salary of an Empolyee: ");
+        this.Salary = Convert.ToDouble(Console.ReadLine());
+    }
+    public double grossSalary()
+    {
+        if (Salary >= 20000)
+        {
+            this.HRA = Salary * 30 / 100;
+            this.TA = Salary * 25 / 100;
+            this.DA = Salary * 35 / 100;
+            this.GrossSalary = Salary + HRA + TA + DA;
+        }
+        else if (Salary >= 15000)
+        {
+            this.HRA = Salary * 25 / 100;
+            this.TA = Salary * 20 / 100;
+            this.DA = Salary * 30 / 100;
+            this.GrossSalary = Salary + HRA + TA + DA;
+        }
+        else if (Salary >= 10000)
+        {
+            this.HRA = Salary * 20 / 100;
+            this.TA = Salary * 15 / 100;
+            this.DA = Salary * 25 / 100;
+            this.GrossSalary = Salary + HRA + TA + DA;
+        }
+        else if (Salary >= 5000)
+        {
+            this.HRA = Salary * 15 / 100;
+            this.TA = Salary * 10 / 100;
+            this.DA = Salary * 20 / 100;
+            this.GrossSalary = Salary + HRA + TA + DA;
+        }
+        else
+        {
+            this.HRA = Salary + 10 / 100;
+            this.TA = Salary + 5 / 100;
+            this.DA = Salary + 15 / 100;
+            this.GrossSalary = Salary + HRA + TA + DA;
+        }
+        return GrossSalary;
+    }
+    public double CalculateSalary()
+    {
+        this.PF = this.GrossSalary * 10 / 100;
+        this.TDS = this.GrossSalary * 18 / 100;
+        return this.NetSalary = this.GrossSalary - (this.PF + this.TDS);
+    }
+
+    public String getEmployeeName()
+    {
+        return this.EmpName;
+    }
+    public int getEmpNo()
+    {
+        return this.EmpNo;
+    }
+}
+public class HelloWorld
+{
+    public static void Main(string[] args)
+    {
+
+        Employee emp = new Employee();
+
+        emp.getEmployeeDetails();
+        double grossSalary = emp.grossSalary();
+
+        //Employee id
+
+        Console.WriteLine("Employee id of " + emp.getEmployeeName() + " is " + emp.getEmpNo());
+
+        Console.WriteLine("Gross salary of " + emp.getEmployeeName() + " is " + grossSalary);
+
+        double salaray = emp.CalculateSalary();
+        Console.WriteLine("Net salary of " + emp.getEmployeeName() + " is " + salaray);
+        Console.ReadKey();
+    }
+} 
+

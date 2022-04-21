@@ -1,0 +1,153 @@
+/* 
+using System;
+using System.Collections.Generic;
+using System.Text;
+
+namespace Collections
+{
+    class Program
+    {
+        public void integer()
+        {
+            Console.WriteLine("Enter Size of an Array:");
+            int size = int.Parse(Console.ReadLine());
+            int[] arr = new int[size];
+            int[] arr2 = new int[size];
+
+            Console.WriteLine("Enter Elements to the array:");
+            for (int i = 0; i < size; i++)
+            {
+                arr[i] = int.Parse(Console.ReadLine());
+            }
+
+            Array.Copy(arr, arr2, size);
+
+
+            Console.WriteLine("Copy Elements:");
+            foreach (int array in arr)
+            {
+                Console.WriteLine(array);
+            }
+
+            Array.Sort(arr);
+
+
+            Console.WriteLine("Sort Elements");
+            foreach (int a in arr)
+            {
+                Console.WriteLine(a);
+            }
+
+            Array.Clear(arr, 2, 2);
+
+
+            Console.WriteLine("Clear Elements:");
+            foreach (int n in arr)
+            {
+                Console.WriteLine(n);
+            }
+
+            Array.Reverse(arr);
+
+
+            Console.WriteLine("Reverse Elements:");
+            foreach (int b in arr)
+            {
+                Console.WriteLine(b);
+            }
+       public static void Main(string[] args)
+        {
+            Program p = new Program();
+            p.integer();
+}
+}
+
+
+---------------------------------------------------------------------------------------------------------------------------------------------------------------------
+
+/* 
+
+
+using System;
+using System.Collections;
+
+namespace EmployeeManagement
+{
+    class Program
+    {
+        public static void Main()
+        {
+            ArrayList l1 = new ArrayList();
+            Console.WriteLine("Enter Strings to the array:");
+
+            l1.Add("Umesh");
+            l1.Add("Pratiksha");
+            l1.Add("Meghana");
+
+            foreach (object obj in l1)
+            {
+                Console.WriteLine(obj);
+            }
+            Console.ReadKey();
+        }
+    }
+}
+
+----------------------------------------------------------------------------------------------------------------------------------------------------------------------
+
+/* Create a structure Book which contains the following members:
+bookId, title, price, bookType
+Type of the book should an enumerated data type with values as Magazine, Novel, ReferenceBook, Miscellaneous. Write a console based application to do the following tasks.
+Accept the details of the book
+Display the details of the book. The type of book should be displayed as a string e.g.:
+Magazine*/using System; */
+
+namespace BookStructure
+{
+    class Program
+    {
+            struct Books
+            {
+                public enum bookType
+                {
+                    Magazine,
+                    Novel,
+                    ReferenceBook,
+                    Miscellaneous
+                }
+
+                public string Title { get; set; }
+                public int Price { get; set; }
+                public int BookId { get; set; }
+                public string BookType { get; set; }
+
+            }
+            class BookStructure
+            {
+                public static void Main()
+                {
+                    Books bo = new Books();
+
+                    Console.Write("Enter Book Id :");
+                    bo.BookId = Convert.ToInt32(Console.ReadLine());
+
+                    Console.Write("Enter Book Title:");
+                    bo.Title = (Console.ReadLine());
+
+                    Console.Write("Enter Book Price:");
+                    bo.Price = Convert.ToInt32(Console.ReadLine());
+
+                    Console.Write("Enter Book Type:");
+                    bo.BookType = Console.ReadLine();
+
+                
+                    Console.WriteLine("------------");
+                    Console.WriteLine("------------");
+                    Console.WriteLine(" Book ID :" + bo.BookId);
+                    Console.WriteLine(" Book Title:" + bo.Title);
+                    Console.WriteLine(" Book Price:" + bo.Price);
+                    Console.WriteLine(" Book BookType:" + bo.BookType);
+                }
+            }
+        }
+    }

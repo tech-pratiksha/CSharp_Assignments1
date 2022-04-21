@@ -1,0 +1,404 @@
+/* 1)	Write a console application which will read text files from mentioned file system location. And list subdirectories from mentioned folder on file system using System.IO namespace and use DirectoryInfo, Directory, File and FileInfo Classes with all the methods present in these classes.*/
+
+1)Write a console application which will read text files from mentioned file system location.
+ And list subdirectories from mentioned folder on file system using System.IO namespace and use DirectoryInfo, Directory, 
+File and FileInfo Classes with all the methods present in these classes.
+
+
+using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Text;
+using System.Threading.Tasks;
+using System.IO;
+
+namespace ConsoleApp2
+{
+    public class Directories
+    {
+        static void Main()
+
+        {
+            string path = @"D:\MyDir";
+            string directoryPath = @"D:\MyNewDir";
+            DirectoryInfo dir = Directory.CreateDirectory(directoryPath);
+            Console.WriteLine(dir.FullName);
+            Console.WriteLine(dir.Name);
+
+            DirectoryInfo dirs = new DirectoryInfo(path);
+
+            dirs.Delete(true);
+            dirs.Create();
+
+            dirs.MoveTo(directoryPath);
+
+            dirs.CreateSubdirectory("MysubDir");
+
+            Console.WriteLine("Directory Created");
+            Console.ReadLine();
+
+        }
+    }
+}
+
+/*OutPut
+D:\MyNewDir
+MyNewDir
+*/
+
+-----------------------------------------------------------------------------------------------------------------------------------------------------------------------
+
+/* 2)	Create a simple user interface to accept account related information of a customer.[ Account class from Lab session on Delegates and Events can be used]. Save the information about the customers in a file using StreamWriter and retrieve the information using StreamReader.*/
+2)
+
+using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Text;
+using System.Threading.Tasks;
+using System.IO;
+namespace Assignment7
+{
+    public class StreamReaderWriter
+    {
+        static void Main(string[] args)
+        {
+            Account account = new Account();
+            Console.WriteLine("Deposit......");
+
+            account.Deposit();
+            Console.WriteLine("Reading the data from file");
+            Console.WriteLine();
+            account.ReaderFromFile();
+
+            Console.WriteLine("Withdraw.....");
+            account.Withdraw();
+
+            Console.WriteLine("Reading the data from file");
+            Console.WriteLine();
+            account.ReaderFromFile();
+        }
+    }
+    class Account
+    {
+        private double balance = 10000;
+        String bank=String.Empty;
+        String name=String.Empty;
+        int account;
+        double withdraw, deposit, totalbal;
+        String myPath = @"D:\MyNewDir\Test.txt";
+
+        public void Deposit()
+        {
+            string temp="";
+
+
+            StreamWriter writer = new StreamWriter(myPath,true);
+            do
+            {
+                Console.WriteLine("If you want Enter Or Exit Type: y/n ");
+                temp=Console.ReadLine().ToLower();
+                
+                if(temp!="n")
+                {
+                    Console.WriteLine("Enter Customer name:");
+                    name = Console.ReadLine();
+                    writer.WriteLine(name);
+
+                    Console.WriteLine("Enter Account Number  :");
+                    account = Convert.ToInt32(Console.ReadLine());
+                    writer.WriteLine(account);
+
+                    Console.WriteLine("Enter Deposit Amount :");
+                    deposit = Convert.ToDouble(Console.ReadLine());
+                    writer.WriteLine(deposit);
+
+                    totalbal = balance + deposit;
+                }
+                
+
+            }while(temp != "n");
+
+            writer.Close();    
+            Console.WriteLine("Customer Name : " + name);
+            Console.WriteLine("Account Number: " + account);
+            Console.WriteLine("Total Amount After Deposit  : " + totalbal);
+
+        }
+        public void Withdraw()
+        {
+            string temp = "";
+           
+
+            StreamWriter sr = new StreamWriter(myPath, true);
+
+            do
+            {
+
+                Console.WriteLine("If you want Enter Or Exit Type: y/n ");
+                temp = Console.ReadLine().ToLower();
+
+                if (temp != "n") 
+                {
+                    Console.WriteLine("Enter Customer Name :");
+                    name = Console.ReadLine();
+                    sr.WriteLine(name);
+
+                    Console.WriteLine("Enter Account Number  :");
+                    account = Convert.ToInt32(Console.ReadLine());
+                    sr.WriteLine(account);
+
+                    Console.WriteLine("Enter Withdraw Amount :");
+                    withdraw = Convert.ToDouble(Console.ReadLine());
+                    sr.WriteLine(withdraw);
+
+                    if (withdraw <= balance)
+                    {
+                        totalbal = balance - withdraw;
+
+                        Console.WriteLine("Customer Name: " + name);
+                        Console.WriteLine("Account Number: " + account);
+                        Console.WriteLine("Amount after Withdraw : " + totalbal);
+                    }
+                    else
+                        Console.WriteLine("\n\nUnder balance");
+                }
+                
+
+            } while (temp != "n");
+
+            sr.Close();
+
+        }
+        public void ReaderFromFile()
+        {
+            StreamReader streamReader = new StreamReader(myPath);
+
+            while (!streamReader.EndOfStream)
+            {
+                Console.WriteLine(streamReader.ReadLine());
+            }
+
+            streamReader.Close();
+
+        }
+    }
+}
+
+----------------------------------------------------------------------------------------------------------------------------------------------------------------------
+
+/* 3)	Make the Employee, MarketingExecutive and Manager class as Serializable
+created in LitwareLib.dll .*/
+
+4)
+
+using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Text;
+using System.Threading.Tasks;
+using System.Runtime.Serialization.Formatters.Binary;
+using System.IO;
+
+namespace ConsoleApp1
+
+{
+   
+    public class Employee
+    {
+
+        public static void Main()
+        {
+            string myPath = @"D:\Binary\Test.save";
+
+            string mySecondPath = @"D:\Binary\New.txt";
+
+            Console.Write("Enter the salary of an Employee to find Food ,Petrol,Other Allowances :");
+            Manager m = new Manager(Convert.ToInt32(Console.ReadLine()));
+
+            m.Foodie();
+            m.Petrol();
+            m.Others();
+
+            m.GrossSalary();
+            m.CalculateSalary();
+            m.Mprint();
+
+            DataSerializer ds = new DataSerializer();
+            
+
+            ds.BinarySerialize(m,myPath);
+            Console.WriteLine("Test Deserialize");
+
+            FileStream fs = new FileStream(myPath,FileMode.OpenOrCreate);
+            BinaryFormatter bs = new BinaryFormatter();
+            Manager mm = (Manager)bs.Deserialize(fs);
+            Console.WriteLine("Successfully Deserialized And Deserialized The object");
+            Console.WriteLine("");
+            Console.WriteLine("Manager salary:{0}",mm.CalculateSalary());
+
+
+            Console.WriteLine("Manager salary {0}:", mm);
+
+            fs.Close();
+
+
+            Console.Write("Enter the salary of an Employee to find Tele and Tour Allowances:");
+
+            MarketingExecutive me = new MarketingExecutive(Convert.ToDouble(Console.ReadLine()));
+            me.Grosssalary();
+            me.CalculateSalary();
+            me.Mprint();
+
+            /*Desrialized second object*/
+            DataSerializer dss = new DataSerializer();
+           
+
+            ds.BinarySerialize(me, mySecondPath);
+            Console.WriteLine("Test Deserialize");
+
+            FileStream fss = new FileStream(mySecondPath, FileMode.OpenOrCreate);
+            BinaryFormatter bf = new BinaryFormatter();
+            MarketingExecutive marketingExecutive = (MarketingExecutive)bf.Deserialize(fss);
+            Console.WriteLine("Successfully Deserialized And Deserialized The object");
+            Console.WriteLine("");
+         
+            Console.WriteLine("MarketingExecutive salary After deserialized:{0}", marketingExecutive.CalculateSalary());
+
+            fss.Close();
+
+        }
+
+    }
+    /*Manager class*/
+    [Serializable]
+    public class Manager 
+    {
+        private double petrol;
+        private double food;
+        private double others;
+        private double sal;
+        private double gross;
+        private double netSal;
+        private double Pf, tds;
+
+        public Manager(double Esalary)
+        {
+            sal = Esalary;
+
+
+            //  Console.WriteLine(sal);
+        }
+        public double Foodie()
+        {
+            food = sal * 0.13;
+
+            return food;
+        }
+        public double Petrol()
+        {
+            petrol = sal * 0.08;
+             return petrol;
+        }
+        public double Others()
+        {
+            others = sal * 0.03;
+
+            return others;
+        }
+        public double GrossSalary()
+        {
+            gross = sal + food + petrol + others;
+            return gross;
+        }
+        public double CalculateSalary()
+        {
+            Pf = (gross * 0.10);
+            tds = (gross * 0.18);
+            netSal = gross - (Pf + tds);
+
+            return netSal;
+
+        }
+
+        public void Mprint()
+        {
+            Console.WriteLine("Emp Petrol Allowances:{0}", petrol);
+            Console.WriteLine("Emp Food Allowances:{0}", food);
+            Console.WriteLine("Emp Petrol Allowances:{0}", others);
+            Console.WriteLine("Emp Gross Salary with Allowances:{0}", gross);
+            Console.WriteLine("Emp Net Salary:{0}", netSal);
+        }
+
+    }
+    /*Marketing Excutive Class*/
+    [Serializable]
+    public class MarketingExecutive
+    {
+        private double sal;
+        private double km;
+        private double tourAllowances;
+        private double telephoneAllowances;
+        private double netSal, Pf, tds, gross;
+        public MarketingExecutive(double Esal)
+        {
+            this.sal = Esal;
+        }
+        public double Grosssalary()
+        {
+            Console.Write("Enter the Total Kilometers Covered:");
+            km = Convert.ToDouble(Console.ReadLine());
+            tourAllowances = 5 * km;
+            telephoneAllowances = 1000;
+            gross = sal + tourAllowances + telephoneAllowances;
+             Console.WriteLine(gross);
+            return gross;
+        }
+
+        public double CalculateSalary()
+        {
+            Pf = (gross * 0.10);
+            tds = (gross * 0.18);
+            netSal = gross - (Pf + tds);
+            // Console.WriteLine("Employee Salary:" + Netsal);
+            return netSal;
+
+        }
+        public void Mprint()
+        {
+            Console.WriteLine("Emp Travel Allowances:{0}", tourAllowances);
+            Console.WriteLine("Emp Telephone Allowances:{0}", telephoneAllowances);
+            Console.WriteLine("Emp Gross salary with  Allowances:{0}", gross);
+            Console.WriteLine("Emp Net Salary :{0}", netSal);
+        }
+
+    }
+    class DataSerializer
+    {
+        public void BinarySerialize(Object data,string filePath)
+        {
+            FileStream fileStream;
+            BinaryFormatter binaryFormatter = new BinaryFormatter();
+            if(File.Exists(filePath))
+            {
+                File.Delete(filePath);
+            }
+            fileStream = File.Create(filePath);
+            binaryFormatter.Serialize(fileStream,data);
+            fileStream.Close();
+        } 
+
+        
+    }
+}
+
+/*OutPut
+Enter the salary of an Employee to find Food ,Petrol,Other Allowances :10000
+Emp Petrol Allowances:800
+Emp Food Allowances:1300
+Emp Petrol Allowances:300
+Emp Gross Salary with Allowances:12400
+Emp Net Salary:8928
+  */
+
+
